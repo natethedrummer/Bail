@@ -3,6 +3,10 @@ This Python script explains the main influences of bail access for
 Harris County felony defendants in Spring 2012.
 """
 
+#change directory to bail
+#cd "C:\\bail"
+
+#import packages
 import pandas as pd
 import numpy as np
 from patsy import dmatrices
@@ -10,9 +14,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split, cross_val_score
 from sklearn import metrics
 
-xl_fmd = pd.ExcelFile("C:\\Users\\Nathan Ford\\Bail\\fmd.xlsx")
+#import Felony Master Database excel spreadsheet
+xl_fmd = pd.ExcelFile("C:\\Bail\\fmd.xlsx")
 df_fmd = xl_fmd.parse("Sheet1")
 
+#subset columns
 df_access = df_fmd[['ref',
                     'access',
                     'priors',
@@ -70,5 +76,3 @@ print metrics.classification_report(y_test, predicted)
 scores = cross_val_score(LogisticRegression(), X, y, scoring='accuracy', cv=10)
 print scores
 print scores.mean()
-
-

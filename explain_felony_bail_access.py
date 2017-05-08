@@ -45,7 +45,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_ravel,
                                                     test_size=0.3, 
                                                     random_state=0)
 #estimate coefficients
-model = LogisticRegression()
+model = LogisticRegression(solver='newton-cg', multi_class='multinomial')
 model.fit(X_train, y_train)
 
 #examine model accuracy
@@ -72,6 +72,7 @@ df_coef['pvalue'] = pd.DataFrame(list(zip(np.transpose(pvalues))))
 df_coef = df_coef.rename(columns = {0:'input',
                                      1:'coefficient'
         })
+df_coef['coefficient'] = df_coef['coefficient'].str[0]
 print("Coefficients")
 print(df_coef)
 
@@ -82,7 +83,7 @@ df_pred['access'] = y
 df_pred['ref'] = df_fmd['ref']
 
 #output to excel
-path_out = 'C:\\Bail\\model_bail_access.xlsx'
+path_out = 'C:\\Bail\\explain_felony_bail_access.xlsx'
 writer = pd.ExcelWriter(path_out)
 df_pred.to_excel(writer, 'predictions')
 df_coef.to_excel(writer, 'coefficients')

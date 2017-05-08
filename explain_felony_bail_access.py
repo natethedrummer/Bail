@@ -53,11 +53,11 @@ accuracy_model = model.score(X, y_ravel)
 accuracy_baseline = 1-y_ravel.mean()
 accuracy_change = accuracy_model - accuracy_baseline
 print ("Model Accuracy")
-print (accuracy_model)
+print ("{:.0%}".format(accuracy_model))
 print("Baseline Accuracy")
-print (accuracy_baseline)
+print ("{:.0%}".format(accuracy_baseline))
 print("Change in Accuracy")
-print(accuracy_change)
+print ("{:.0%}".format(accuracy_change))
 """
 #need to figure out how to add model accuracy to df and excel output
 df_accuracy = pd.DataFrame(list(zip(np.transpose[accuracy_model,

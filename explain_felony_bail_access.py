@@ -3,16 +3,13 @@ This Python script explains the main influences of bail access for
 Harris County felony defendants in Spring 2012.
 """
 
-#change directory to bail
-#cd "C:\\bail"
-
 #import packages
 import pandas as pd
 import numpy as np
 from patsy import dmatrices
 from sklearn.linear_model import LogisticRegression
-from sklearn.cross_validation import train_test_split, cross_val_score
-from sklearn import metrics
+from sklearn.cross_validation import train_test_split
+from sklearn.feature_selection import chi2
 
 #import Felony Master Database excel spreadsheet
 xl_fmd = pd.ExcelFile("C:\\Bail\\fmd.xlsx")
@@ -33,46 +30,43 @@ df_access = df_fmd[['ref',
 df_access = df_access[df_access['race'] != 'OTHER']
 df_access = df_access[df_access['counsel_type'] != 'Other/Unknown']
 
-#prep data for model
+#specify regression formula
 y, X = dmatrices('access ~ priors + counsel_type + race + gender + \
                   age',
                   df_access, return_type="dataframe")
-y = np.ravel(y)
 
-#estimate coefficients
-model = LogisticRegression()
-model = model.fit(X, y)
-
-#score model
-model.score(X, y)
-y.mean()
-boost = model.score(X, y) - (1 - y.mean())
-
-#examine the coefficients
-pd.DataFrame(list(zip(X.columns, np.transpose(model.coef_)))
+# flatten y into a 1-D array so that scikit-learn will 
+#properly understand it as the response variable
+y_ravel = np.ravel(y)
 
 #split df_access into train and validate
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
-
+X_train, X_test, y_train, y_test = train_test_split(X, y_ravel, 
+                                                    test_size=0.3, 
+                                                    random_state=0)
 #estimate coefficients
-model2 = LogisticRegression()
-model2.fit(X_train, y_train)
+model = LogisticRegression()
+model.fit(X_train, y_train)
 
-#predict the test set
-predicted = model2.predict(X_test)
-print predicted
+#examine model accuracy
+accuracy_model = model.score(X, y_ravel)
+accuracy_baseline = 1-y_ravel.mean()
+accuracy_change = accuracy_model - accuracy_baseline
+print ("Model Accuracy")
+print (accuracy_model)
+print("Baseline Accuracy")
+print (accuracy_baseline)
+print("Change in Accuracy")
+print(accuracy_change)
 
-#generate probabilities
-probs = model2.predict_proba(X_test)
-print probs
+#examine coefficients
+df_coef = pd.DataFrame(list(zip(X.columns, np.transpose(model.coef_))))
+pvalues = chi2(X_train, y_train)
+df_coef['pvalues'] = pd.DataFrame(list(zip(np.transpose(pvalues))))
+print("Coefficients")
+print(df_coef)
 
-#generate evaluation metrics
-print metrics.accuracy_score(y_test, predicted)
-print metrics.roc_auc_score(y_test, probs[:, 1])
-print metrics.confusion_matrix(y_test, predicted)
-print metrics.classification_report(y_test, predicted)
+#examine predictions
+df_pred = X
+df_pred['access_predicted'] = model.predict(X)
+df_pred['access'] = y
 
-# evaluate the model using 10-fold cross-validation
-scores = cross_val_score(LogisticRegression(), X, y, scoring='accuracy', cv=10)
-print scores
-print scores.mean()

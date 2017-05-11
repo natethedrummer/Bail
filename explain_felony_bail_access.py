@@ -23,17 +23,16 @@ df_access = df_fmd[['SPN',
                     'priors',
                     'f_priors',
                     'm_priors',
-                    'counsel_type',
+                    'hired_attorney',
                     'race',
                     'gender',
                     'age']]
 	
 #remove outliers
 df_access = df_access[df_access['race'] != 'OTHER']
-df_access = df_access[df_access['counsel_type'] != 'Other/Unknown']
 
 #specify regression formula
-y, X = dmatrices('access ~ priors + counsel_type + race + gender + age',
+y, X = dmatrices('access ~ priors + hired_attorney + race + gender + age',
                   df_access, 
                   return_type="dataframe")
 

@@ -18,7 +18,7 @@ xl_fmd = pd.ExcelFile(path_fmd)
 df_fmd = xl_fmd.parse("Sheet1")
 
 #subset columns
-df_access = df_fmd[['ref',
+df_access = df_fmd[['SPN',
                     'access',
                     'priors',
                     'f_priors',
@@ -81,7 +81,7 @@ print(df_coef)
 df_pred = X
 df_pred['access_predicted'] = model.predict(X)
 df_pred['access'] = y
-df_pred['ref'] = df_fmd['ref']
+df_pred['spn'] = df_fmd['SPN']
 
 #output to excel
 path_out = os.path.join(os.getcwd(), "explain_felony_bail_access.xlsx")

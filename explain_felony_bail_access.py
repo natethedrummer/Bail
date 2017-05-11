@@ -25,11 +25,10 @@ df_access = df_fmd[['SPN',
                     'm_priors',
                     'hired_attorney',
                     'poc',
-                    'gender',
-		    'age']]
+                    'gender']]
 	
 #specify regression formula
-y, X = dmatrices('access ~ priors + hired_attorney + poc + gender + age',
+y, X = dmatrices('access ~ priors + hired_attorney + poc + gender',
                   df_access, 
                   return_type="dataframe")
 

@@ -12,11 +12,33 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split
 from sklearn.feature_selection import chi2
 
-#import Felony Master Database excel spreadsheet
-path_fmd = os.path.join(os.getcwd(), "fmd.xlsx")
+#import Felony Master Database clean excel spreadsheet
+path_fmd = os.path.join(os.getcwd(), "fmd_clean.xlsx")
 xl_fmd = pd.ExcelFile(path_fmd)
 df_fmd = xl_fmd.parse("Sheet1")
 
+#bin offense
+series_offense = pd.Series({'ARSON': 'ARSON',
+                          'SALE DRUG': 'DRUG',
+                          'POSS DRUG': 'DRUG',
+                          'FEL DWI': 'DWI',
+                          'KIDNAPPING': 'KIDNAPPING',
+                          'CAP MURDER': 'MURDER',
+                          'CAPITAL MURDER': 'MURDER',
+                          'ASLT-MURDR': 'MURDER',
+                          'MURD/MANSL': 'MURDER',
+                          'MURDER': 'MURDER',
+                          'ROBBERY': 'ROBBERY',
+                          'THEFT': 'ROBBERY',
+                          'BURGLARY': 'ROBBERY',
+                          'burglary': 'ROBBERY',
+                          'AUTO THEFT': 'ROBBERY',
+                          'RAPE': 'SEX ABUSE',
+                          'SEX ABUSE': 'SEX ABUSE',
+                          'OTHER FEL': 'OTHER',
+                          'OTHERMISD': 'OTHER'})
+df_fmd['offense_bin'] = df_fmd['Offense'].map(series_offense)
+      
 #subset columns
 df_access = df_fmd[['SPN',
                     'access',
@@ -25,10 +47,11 @@ df_access = df_fmd[['SPN',
                     'm_priors',
                     'hired_attorney',
                     'poc',
-                    'gender']]
+                    'gender',
+                    'offense_bin']]
     	
 #specify regression formula
-y, X = dmatrices('access ~ priors + hired_attorney + poc + gender',
+y, X = dmatrices('access ~ priors + hired_attorney + poc + gender + offense_bin',
                   df_access, 
                   return_type="dataframe")
 

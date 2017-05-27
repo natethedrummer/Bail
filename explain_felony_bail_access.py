@@ -26,7 +26,7 @@ df_access = df_fmd[['SPN',
                     'hired_attorney',
                     'poc',
                     'gender']]
-	
+    	
 #specify regression formula
 y, X = dmatrices('access ~ priors + hired_attorney + poc + gender',
                   df_access, 
@@ -54,12 +54,9 @@ print("Baseline Accuracy")
 print ("{:.0%}".format(accuracy_baseline))
 print("Change in Accuracy")
 print ("{:.0%}".format(accuracy_change))
-"""
-#need to figure out how to add model accuracy to df and excel output
-df_accuracy = pd.DataFrame(list(zip(np.transpose[accuracy_model,
-       accuracy_baseline,
-       accuracy_change])))
-"""
+df_accuracy = pd.DataFrame({'Baseline Accuracy': [accuracy_baseline],
+                            'Model Accuracy': [accuracy_model],
+                            'Change in Accuracy': [accuracy_change]})
 
 #examine coefficients
 df_coef = pd.DataFrame(list(zip(X.columns, np.transpose(model.coef_))))
@@ -81,6 +78,7 @@ df_pred['spn'] = df_fmd['SPN']
 #output to excel
 path_out = os.path.join(os.getcwd(), "explain_felony_bail_access.xlsx")
 writer = pd.ExcelWriter(path_out)
-df_pred.to_excel(writer, 'predictions')
 df_coef.to_excel(writer, 'coefficients')
+df_accuracy.to_excel(writer, 'accuracy')
+df_pred.to_excel(writer, 'predictions')
 writer.save()

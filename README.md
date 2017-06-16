@@ -9,4 +9,4 @@ Working with Dr. Wheeler at [Themis Research](http://themisresearch.org/ "Themis
 ## This Repository  
 This repo contains the data, Python code, and charts I've used to prove that Harris County bail practices are unconstitutionally discriminating against defendants with low income.  
 
-![alt text](http://www.pretrial.org/the-problem/#.WURHrKy3kXA.link "Chart")
+![alt text](Y:\Bail\Pretrial_Problem.png "Chart")

@@ -1,8 +1,3 @@
-"""
-This Python script explains the main influences of bail access for
-Harris County felony defendants in Spring 2012.
-"""
-
 #import packages
 import pandas as pd
 import numpy as np

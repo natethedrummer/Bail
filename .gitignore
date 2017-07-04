@@ -1,9 +1,6 @@
-plot_corr.png
-plot_roc.jpg
-felony_chart.xlsm
-fmd.xlsx
-explain_felony_bail_access.xlsx
-severity_days_detained_chart.xlsx
-severity_days_detained_summary_chart.xlsx
-severity_daysdetained_bondcat_chart.xlsx
+*.png
+*.jpg
+*.xlsm
+*.xlsx
 .bash_profile
+__pycache__/

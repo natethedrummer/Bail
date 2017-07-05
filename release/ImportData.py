@@ -1,12 +1,11 @@
 # import packages
-import os
 import pandas as pd
 
 # get offenses
 def get_offenses():
 
     # import Felony Master Database clean excel spreadsheet
-    path_fmd = os.path.join(os.getcwd(), "felony_offenses.xlsx")
+    path_fmd = "https://raw.github.com/natethedrummer/bail/master/felony_offenses.xlsx"
     xl_fmd = pd.ExcelFile(path_fmd)
     df_offenses = xl_fmd.parse("Sheet1")
     

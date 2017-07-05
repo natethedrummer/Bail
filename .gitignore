@@ -1,6 +1,4 @@
 *.png
 *.jpg
-*.xlsm
-*.xlsx
 .bash_profile
 __pycache__/

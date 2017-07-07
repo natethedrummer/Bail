@@ -4,6 +4,7 @@ import seaborn as sns
 
 import numpy as np
 
+from Hissong import descriptive_stats as ds
 from ImportData import get_offenses
 from ModelDiagnostics import coef, accuracy, pred
 from Utility import out_to_xl
@@ -16,6 +17,7 @@ from sklearn.linear_model import LogisticRegression
 df_offenses = get_offenses()
 
 # descriptive statistics
+df_ds = ds(df_offenses)
 
 # mean bail amount by demographics
 
@@ -24,8 +26,6 @@ df_offenses = get_offenses()
 # estimate coefficients and odds ratio of logit equation: probability of bail
 
 # estimated probability of bail for selected defendant types
-
-
 
 # select features
 df_release = df_offenses[['SPN',

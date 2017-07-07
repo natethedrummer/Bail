@@ -15,7 +15,19 @@ from sklearn.linear_model import LogisticRegression
 # get data frame of felony offenses and release status
 df_offenses = get_offenses()
 
-# select features to explain why defendants get released
+# descriptive statistics
+
+# mean bail amount by demographics
+
+# ols results of natural log of bond amount
+
+# estimate coefficients and odds ratio of logit equation: probability of bail
+
+# estimated probability of bail for selected defendant types
+
+
+
+# select features
 df_release = df_offenses[['SPN',
                     'access',
                     'priors',
@@ -26,7 +38,7 @@ df_release = df_offenses[['SPN',
                     'gender',
                     'offense_bin']]
 
-# check for multicollinearity between candidate features
+# check for multicollinearity 
 df_corr = df_release[['priors', 'hired_attorney', 'poc', 'gender', 'offense_bin']].corr()
 
 for col in df_corr.columns.values:
@@ -43,27 +55,37 @@ for col in df_corr.columns.values:
 plot_corr = sns.heatmap(df_corr, 
             xticklabels=df_corr.columns.values,
             yticklabels=df_corr.columns.values)
+
 fig_corr = plot_corr.get_figure()
+
 fig_corr.savefig("plot_corr.png")
     
-#specify regression formula
+# specify regression formula
 y, X = dmatrices('access ~ priors + hired_attorney + poc + gender + offense_bin',
                   df_release, 
                   return_type="dataframe")
     
-# flatten y into a 1-D array so that scikit-learn will properly understand it as the response variable
+# flatten y into a 1-D array for scikit-learn
 y_ravel = np.ravel(y)
 
 # split into train and validate
 X_train, X_test, y_train, y_test = train_test_split(X, y_ravel, 
                                                     test_size=0.3, 
                                                     random_state=0)    
-#estimate coefficients
+
+# estimate coefficients
 model = LogisticRegression(solver='newton-cg', multi_class='multinomial')
+
 model.fit(X_train, y_train)
 
-# report coefficients
+# report feature importance
 df_coef = coef(model, X, X_train, y_train)
+
+plot_coef = sns.barplot(x="feature", y="probability", data=df_coef)
+
+fig_coef = plot_coef.get_figure()
+
+fig_coef.savefig("plot_coef.png")
 
 # report model accuracy
 df_accuracy = accuracy(model, X_test, y_test)
@@ -71,5 +93,5 @@ df_accuracy = accuracy(model, X_test, y_test)
 # report predictions 
 df_pred = pred(model, X, y, df_offenses)
 
-#output to excel
+# output to excel
 out_to_xl(df_coef, df_accuracy, df_pred)

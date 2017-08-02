@@ -1,4 +1,6 @@
+venv/
 *.png
 *.jpg
 .bash_profile
 __pycache__/
+*.xlsx

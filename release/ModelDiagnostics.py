@@ -87,7 +87,7 @@ def accuracy(model, X_test, y_test):
     plt.ylim([0, 1])
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
-    plt.savefig('plot_roc.jpg')
+    plt.savefig('plot_roc.png')
     
     # precision score
     df_accuracy['precision_score'] = round(
